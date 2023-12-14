@@ -1,0 +1,62 @@
+/* Exercício 1:  Use o banco books.json, o mesmo usado em aula Observação: Projete apenas o necessário nas buscas.   
+- Faça uma busca de quantos livros não estão com o status publicado e pageCount menor que 300 
+- Faça uma busca de livros que contém as palavras MongoDB e SQL Server no título 
+- Faça uma busca com expressão regular onde ISBN começa com 18 
+- Usando Expressão Regular, busque livros que contém a palavra JAVA ou Mobile na descrição do livro (LongDescription), 
+lembrando que deve trazer todas as palavras independente de começa com maiúsculo ou minúsculo 
+Exercício 2: Nas mesmas buscas do exercício anterior, traga apenas o número do resultado usando o contador
+*/
+
+db.books.find({
+  "status": { "$ne": "publicado" },
+  "pageCount": { "$lt": 300 }
+})
+
+db.books.find({
+  $and: [
+    { title: { $regex: "MongoDB", $options: "i" } }, // 'i' para ignorar case
+    { title: { $regex: "SQL Server", $options: "i" } }
+  ]
+})
+
+db.books.find({
+  ISBN: { $regex: "^18" }
+})
+
+db.books.find({
+  longDescription: { $regex: "JAVA|Mobile", $options: "i" } // 'i' para ignorar case
+})
+
+db.books.find({
+  longDescription: { $regex: "JAVA|Mobile", $options: "i" } // 'i' para ignorar case
+})
+
+// Contar livros não publicados com pageCount menor que 300
+const count1 = db.books.find({
+  $and: [
+    { status: { $ne: "publicado" } },
+    { pageCount: { $lt: 300 } }
+  ]
+}).count();
+
+// Contar livros com as palavras "MongoDB" e "SQL Server" no título
+const count2 = db.books.find({
+  $and: [
+    { title: { $regex: "MongoDB", $options: "i" } },
+    { title: { $regex: "SQL Server", $options: "i" } }
+  ]
+}).count();
+
+// Contar livros com ISBN começando com "18"
+const count3 = db.books.find({
+  ISBN: { $regex: "^18" }
+}).count();
+
+// Contar livros com a palavra "JAVA" ou "Mobile" na descrição
+const count4 = db.books.find({
+  longDescription: { $regex: "JAVA|Mobile", $options: "i" }
+}).count();
+
+
+
+
